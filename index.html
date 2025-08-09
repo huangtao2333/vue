@@ -10,6 +10,14 @@
     <!-- 页面标题 -->
     <header class="h">
         <h1>我的任务看板</h1>
+        <div class="help">
+            <span>💡 提示：拖拽卡片可移动任务 | Ctrl+N 快速添加任务 | Ctrl+L 添加列表</span>
+        </div>
+        <div class="tools">
+            <button onclick="exportData()" title="导出数据">📤 导出</button>
+            <button onclick="importData()" title="导入数据">📥 导入</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
+        </div>
     </header>
 
     <!-- 看板主容器 -->

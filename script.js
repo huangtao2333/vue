@@ -335,7 +335,7 @@ document.addEventListener('keydown', function(e) {
         closeModal();
         closeListModal();
     }
-    
+
     // Enter键保存
     if (e.key === 'Enter') {
         if (document.getElementById('modal').style.display === 'flex') {
@@ -343,6 +343,20 @@ document.addEventListener('keydown', function(e) {
         } else if (document.getElementById('listModal').style.display === 'flex') {
             saveList();
         }
+    }
+
+    // Ctrl+N 快速添加任务到第一个列表
+    if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault();
+        if (d.length > 0) {
+            addCard(d[0].id);
+        }
+    }
+
+    // Ctrl+L 快速添加新列表
+    if (e.ctrlKey && e.key === 'l') {
+        e.preventDefault();
+        addList();
     }
 });
 
@@ -377,3 +391,67 @@ document.getElementById('listModal').addEventListener('click', function(e) {
         closeListModal();
     }
 });
+
+// 导出数据
+function exportData() {
+    const dataStr = JSON.stringify(d, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `kanban-backup-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+
+    // 显示成功提示
+    showMessage('数据导出成功！');
+}
+
+// 导入数据
+function importData() {
+    document.getElementById('importFile').click();
+}
+
+// 处理文件导入
+function handleImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+
+            // 验证数据格式
+            if (Array.isArray(importedData) && importedData.every(list =>
+                list.id && list.title && Array.isArray(list.cards)
+            )) {
+                if (confirm('确定要导入数据吗？这将覆盖当前所有数据。')) {
+                    d = importedData;
+                    renderBoard();
+                    saveData();
+                    showMessage('数据导入成功！');
+                }
+            } else {
+                showMessage('文件格式不正确！', 'error');
+            }
+        } catch (error) {
+            showMessage('文件解析失败！', 'error');
+        }
+    };
+    reader.readAsText(file);
+
+    // 清空文件输入
+    event.target.value = '';
+}
+
+// 显示消息提示
+function showMessage(text, type = 'success') {
+    const msg = document.createElement('div');
+    msg.className = `message ${type}`;
+    msg.textContent = text;
+    document.body.appendChild(msg);
+
+    setTimeout(() => {
+        msg.remove();
+    }, 3000);
+}

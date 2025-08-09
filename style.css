@@ -25,6 +25,35 @@ body {
     color: #4a5568;
     font-size: 28px;
     font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.help {
+    color: #718096;
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.tools {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tools button {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s ease;
+}
+
+.tools button:hover {
+    background: #3182ce;
 }
 
 /* 看板主容器 */
@@ -286,6 +315,72 @@ body {
 .l.drag-over {
     background: rgba(66, 153, 225, 0.1);
     border: 2px dashed #4299e1;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+/* 卡片添加动画 */
+@keyframes cardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.c {
+    animation: cardSlideIn 0.3s ease-out;
+}
+
+/* 列表添加动画 */
+@keyframes listSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.l {
+    animation: listSlideIn 0.4s ease-out;
+}
+
+/* 消息提示 */
+.message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    z-index: 2000;
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+.message.success {
+    background: #48bb78;
+}
+
+.message.error {
+    background: #e53e3e;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* 响应式设计 */
