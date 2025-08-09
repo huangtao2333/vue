@@ -77,7 +77,10 @@ function renderList(list) {
     // 列表标题
     const titleDiv = document.createElement('div');
     titleDiv.className = 'lt';
-    titleDiv.innerHTML = `<h3>${list.title}</h3>`;
+    titleDiv.innerHTML = `
+        <h3>${list.title}</h3>
+        <span class="count">${list.cards.length}</span>
+    `;
     
     // 卡片容器
     const cardsDiv = document.createElement('div');
@@ -85,10 +88,18 @@ function renderList(list) {
     cardsDiv.id = list.id + '-cards';
     
     // 渲染卡片
-    list.cards.forEach(card => {
-        const cardDiv = createCardElement(card);
-        cardsDiv.appendChild(cardDiv);
-    });
+    if (list.cards.length === 0) {
+        // 空列表提示
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'empty';
+        emptyDiv.textContent = '暂无任务，点击下方按钮添加';
+        cardsDiv.appendChild(emptyDiv);
+    } else {
+        list.cards.forEach(card => {
+            const cardDiv = createCardElement(card);
+            cardsDiv.appendChild(cardDiv);
+        });
+    }
     
     // 添加任务按钮
     const addDiv = document.createElement('div');
@@ -114,12 +125,30 @@ function createCardElement(card) {
     cardDiv.className = 'c';
     cardDiv.draggable = true;
     cardDiv.id = card.id;
-    cardDiv.textContent = card.text;
-    
+
+    // 创建卡片内容容器
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'cc';
+    contentDiv.textContent = card.text;
+
+    // 创建删除按钮
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'db';
+    deleteBtn.innerHTML = '×';
+    deleteBtn.title = '删除任务';
+    deleteBtn.onclick = function(e) {
+        e.stopPropagation();
+        deleteCard(card.id);
+    };
+
+    // 组装卡片
+    cardDiv.appendChild(contentDiv);
+    cardDiv.appendChild(deleteBtn);
+
     // 添加拖拽事件
     cardDiv.addEventListener('dragstart', handleDragStart);
     cardDiv.addEventListener('dragend', handleDragEnd);
-    
+
     return cardDiv;
 }
 
@@ -316,6 +345,25 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// 删除卡片
+function deleteCard(cardId) {
+    if (confirm('确定要删除这个任务吗？')) {
+        // 找到卡片所在的列表
+        const listId = findCardList(cardId);
+        const list = d.find(l => l.id === listId);
+
+        // 从列表中移除卡片
+        const cardIndex = list.cards.findIndex(card => card.id === cardId);
+        list.cards.splice(cardIndex, 1);
+
+        // 重新渲染
+        renderBoard();
+
+        // 保存数据
+        saveData();
+    }
+}
 
 // 点击弹窗外部关闭弹窗
 document.getElementById('modal').addEventListener('click', function(e) {
