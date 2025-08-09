@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人任务看板 - MyKanban</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 页面标题 -->
+    <header class="h">
+        <h1>我的任务看板</h1>
+    </header>
+
+    <!-- 看板主容器 -->
+    <main class="b" id="board">
+        <!-- 列表容器 - 这里会动态生成列表 -->
+        <div class="l" id="todo">
+            <div class="lt">
+                <h3>待办事项</h3>
+            </div>
+            <div class="lc" id="todo-cards">
+                <!-- 任务卡片会在这里显示 -->
+            </div>
+            <div class="ab">
+                <button class="abt" onclick="addCard('todo')">+ 添加任务</button>
+            </div>
+        </div>
+
+        <div class="l" id="doing">
+            <div class="lt">
+                <h3>进行中</h3>
+            </div>
+            <div class="lc" id="doing-cards">
+                <!-- 任务卡片会在这里显示 -->
+            </div>
+            <div class="ab">
+                <button class="abt" onclick="addCard('doing')">+ 添加任务</button>
+            </div>
+        </div>
+
+        <div class="l" id="done">
+            <div class="lt">
+                <h3>已完成</h3>
+            </div>
+            <div class="lc" id="done-cards">
+                <!-- 任务卡片会在这里显示 -->
+            </div>
+            <div class="ab">
+                <button class="abt" onclick="addCard('done')">+ 添加任务</button>
+            </div>
+        </div>
+
+        <!-- 添加新列表按钮 -->
+        <div class="al">
+            <button class="alb" onclick="addList()">+ 添加新列表</button>
+        </div>
+    </main>
+
+    <!-- 添加任务的弹窗 -->
+    <div class="m" id="modal" style="display: none;">
+        <div class="mc">
+            <h3>添加新任务</h3>
+            <input type="text" id="taskInput" placeholder="请输入任务内容..." maxlength="100">
+            <div class="mb">
+                <button onclick="saveTask()">保存</button>
+                <button onclick="closeModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加列表的弹窗 -->
+    <div class="m" id="listModal" style="display: none;">
+        <div class="mc">
+            <h3>添加新列表</h3>
+            <input type="text" id="listInput" placeholder="请输入列表名称..." maxlength="20">
+            <div class="mb">
+                <button onclick="saveList()">保存</button>
+                <button onclick="closeListModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
